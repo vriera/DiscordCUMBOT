@@ -1,56 +1,154 @@
 console.log("cum");
+import { metaphone } from 'metaphone';
+import{ randomInt }  from 'crypto';
+import { Client, Intents, MessageAttachment } from 'discord.js';
+import { handle_cum_commands } from './commands.js';
+import { measureMemory } from 'vm';
+import { agregar_cumple } from './cumpleaños.js';
+import { mandar_cumpleaños } from './cumpleaños.js';
+const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] , disableEveryone: false });
 
-const fechas_string = '\*\*\*\`\`\`markdown\n\n#Fechas del server\n\n<7 de enero> - dia del rugbier\n\n<20 de enero> - día de azul salió de la casa\n\n<24 de marzo> - cumpleaños del server\n\n<11 de abril> - sábados de ewje\n\n<28 de abril> - día de Gonzalo la concha de tu madre\n\n<7 de mayo> - día en el que Sugaton me abandonó por el Dead by Deadlight\n\n<27 de mayo> - día de gonzalo la no concha de tu madre\n\n<25 de junio> - cumpleaños de Azul\n\n<8 de julio> - día de Lu con pene\n\n<22 de julio> - día fasil\n\n<20 de septiembre> - día del mongo\n\n<4 de noviembre> - Ozuna en DIRT 5\n\n<9 de diciembre> - día del remisero\`\`\`\*\*\*';
-const reglas_string = '*\*\`\`\`markdown\n\n#Reglas del servidor\n\n<Regla Numero 1> - Medir más de 1,60 [Nauel es una excepción](Roma también)\n\n<Regla Numero 2> - No ponerla en los ultimos 5 meses [Tener pareja no cuenta](si es menor tampoco)\n\n<Regla Numero 3> - Sacala que me cago\n\n<Regla Numero 4> - En este servidor no hay amor propio ni amor mutuo\n\n<Regla Numero 5> - Gaso escabiado [Los viernes](sabados,domingos,lunes,martes,miercoles,jueves...)\n\n<Regla Numero 6> - @seb#1780 \n\n<Regla Numero 7> - Estudiar programación o economía [Ingeniería también vale](El admin es una excepción)\n\n<Regla Numero 8> - Ser de Mar del Plata [La Patagonia tambien vale](El norte también, y Capital a veces)\n\n<Regla Numero 9> - Loncopué?\n\n<Regla Numero 10> - Habrá chicas que les guste el hentai? 👉👈\n\n<Regla Numero 11> - ESTOY TILTEAO\n\n<Regla Numero 12> - No canten padoru por favor 🙏\n\n<Regla Numero 13> - Mutear a Luca\`\`\`\*\*';
-
-
-const prompt = 'coño ';
-const pattern = /^coño */;
+const pattern = /^cum */;
+const pattern_a = /^cum a */;
 const pattern_no = /(^lol| lol)/;
-const Discord = require('discord.js');
-const client = new Discord.Client();
+const pattern_k = /(^$k)/;
+const comandos = 'El prefijo para llamar al bot es cum\n Los comandos disponibles en el kumbot son:\n\t-cum : cumeas\n\t-papi: te dice si sos mi papi\n\tstroke: cummeo mucho\n\t-no puedo parar: te da la razon xq';
+const pattern_2 = /cum/;
 
-client.once('ready' , () => {
-    console.log('Ready!');
-});
 
-client.on('message' , message => {
-    if(pattern.test(message.content)){
-        switch ( message.content ){
-            case prompt + 'cum':
-                message.channel.send( `Tremenda cummeada de @${message.author.tag}`);
-                break;
-            case prompt + 'fechas':
-                if( message.author.tag === 'Prompt#5377'){
-                    message.channel.send(fechas_string);
-                }
-                break;
-            case prompt + 'ozuna':
-                    message.channel.send('trabajando');
-            
-                break;
-            case prompt + 'reglas':
-                if( message.author.tag === 'Prompt#5377'){
-                    message.channel.send(reglas_string);
-                }
-                break;
-            case prompt + 'stroke':
 
-                break;
-            case prompt + 'coño':
-                message.channel.send('coñito');
-                break;   
-            default:
-                message.channel.send('comando no reconocido'); 
+const drogas_message = ["si" , "dame" , "quiero" , "venga la droga" , "DRAGS"];
+client.on('message' , async message => {
+    message.content = message.content.toLowerCase();
+    if(pattern_a.test(message.content) && message.author.id !== '885480631470010390'){
+        message.react("💦");
+        handle_cum_a(message);
+    }else if(pattern.test(message.content) && message.author.id !== '885480631470010390'){
+        message.react("💦");
+        handle_cum_commands(message);
+    }else if(pattern_2.test(message.content)){
+        message.react("💦");
+        let num = randomInt(60 , 80);
+        console.log(num);
+        if(num === 69  ){
+            message.reply('https://ih1.redbubble.net/image.832929109.6327/flat,750x,075,f-pad,750x1000,f8f8f8.u1.jpg');
         }
+    }
+    if(/^cumpleaños */.test(message.content) && message.content.split(" ").length == 3 ){
+       // try{
+        agregar_cumple(message);
+       // }catch(e){
+        //    console.log("oopsy doopsy");
+        //}
     }
     if(pattern_no.test(message.content)){
         message.reply('no');
     }
+    if(pattern_k.test(message.content)){
+        message.reply('kakeras');
+    }
+    if ( /2011|chota|pito|pene|dick|luca/.test(message.content.toLowerCase())){
+        message.react("2️⃣").then(message.react("0️⃣")).then(message.react("1️⃣")).then(message.react("🇮"));
+    }
+
+    if (/drogas|droga|drugs|drug|marihuana|falopa|brownie|weed/.test(message.content.toLowerCase()) && message.author.id !== '885480631470010390'){
+        message.reply(drogas_message[randomInt(0 , drogas_message.length -1 )]);
+    }
+    let tokens = message.content.split(" ")
+    for ( let i = 0 ; i < tokens.length ; i++ ){
+        if(metaphone(tokens[i]) === metaphone('cum') && message.author.id !== '885480631470010390' ){            
+            message.react("💦");
+            break;
+        }
+    }
+    
+    if ( message.guildId === '427157513234808842'){
+        let num =randomInt(1 , 100 );
+        console.log(num + ' shiny');
+        if ( num === 69 ){
+                message.reply('salió shiny');
+                message.reply('https://cdn.discordapp.com/attachments/673769041541726256/885729613609861182/unknown.png');
+        }
+    }
+});
+
+client.once('ready' , () => {
+    console.log('Ready!');  
+    setTimeout(function(){ // in leftToEight() milliseconds run this:
+        sendMessage(); // send the message once
+        let dayMillseconds = 1000 * 60 * 60 * 24;
+        setInterval(function(){ // repeat this every 24 hours
+            sendMessage();
+        }, dayMillseconds)
+    }, leftToHour(9));
+    //mandar_cumpleaños(client);
+});
+
+
+async function handle_cum_a( message){
+    if( message.content === 'cum a todos'){
+        let all = await message.guild.roles.fetch("@everyone");
+        message.channel.send(`@everyone tomen su cum`)
+    }else{
+    let num = randomInt(60 , 80);
+    console.log(num);
+        if(num === 69  ){
+            message.reply('https://ih1.redbubble.net/image.832929109.6327/flat,750x,075,f-pad,750x1000,f8f8f8.u1.jpg');
+        }
+    console.log(`cummeando a alguien`);
+    console.log(message.mentions);
+    console.log(message.mentions.users);
+    let usuarios = message.mentions.users
+    usuarios.forEach(user => {
+        if(user.id === message.author.id ){
+          message.reply(`La autocum`);
+        }else if( user.id === '438511711931203587' ){
+            message.channel.send(`Imposible cummear a <@${user.id}>, zoe es muy pura`);
+        }else {
+        message.channel.send(`Te han cummeado <@${user.id}>`);
+        }
+    }
+   ); }
+};
+
+
+
+function leftToHour(hora){
+    let d = new Date();
+    let date2 = new Date();
+    console.log(d.getTime());
+    date2.setHours(hora);
+    date2.setMinutes(8);
+    if ( d.getHours() > hora ){
+        date2.setDate(date2.getDate() + 1 );
+    }
+    console.log(date2.getTime());
+    return date2.getTime() - d.getTime();
+}
+
+
+function sendMessage(){
+    console.log("xd");
+   let guild = client.guilds.cache.get('885526769141178399');
+    if(guild && guild.channels.cache.get('885526769141178402')){
+        guild.channels.cache.get('885526769141178402').send("Feliz cum");
+    }
+}
+
+function conectarse(message){
+    const { voice } = message.member;
+    if ( voice.channelID ){
+        voice.channel.join();
+    }else{
+        message.reply('Metete a algun lado y volveme a llamar');
+    }
+}
+
+client.on("guildMemberSpeaking", function(member, speaking){
+    member.Client.channels.get(885526769141178402).send("a");
 });
 
 
 
-
-client.login('NzkxMTc3MzExODAxMTgwMjAw.X-LXSg.ujgBSInNFWuWSsDAPtvxTm9efOo');
+client.login('ODg1NDgwNjMxNDcwMDEwMzkw.YTnqGQ.K2TMLjcKxzH3jlQrQFeZn_QscJs');
 
