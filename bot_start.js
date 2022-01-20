@@ -1,4 +1,7 @@
 console.log("cum");
+import { config } from 'dotenv'
+config()
+const {TOKEN} = process.env;
 import { metaphone } from 'metaphone';
 import{ randomInt }  from 'crypto';
 import { Client, Intents, MessageAttachment } from 'discord.js';
@@ -150,5 +153,5 @@ client.on("guildMemberSpeaking", function(member, speaking){
 
 
 
-client.login('ODg1NDgwNjMxNDcwMDEwMzkw.YTnqGQ.K2TMLjcKxzH3jlQrQFeZn_QscJs');
+client.login(TOKEN);
 
