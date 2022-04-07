@@ -1,7 +1,6 @@
 console.log("cum");
-import { config } from 'dotenv'
-config()
-const {TOKEN} = process.env;
+
+const TOKEN = 'TOKENHERE'
 import { metaphone } from 'metaphone';
 import{ randomInt }  from 'crypto';
 import { Client, Intents, MessageAttachment } from 'discord.js';
@@ -9,6 +8,7 @@ import { handle_cum_commands } from './commands.js';
 import { measureMemory } from 'vm';
 import { agregar_cumple } from './cumpleaños.js';
 import { mandar_cumpleaños } from './cumpleaños.js';
+import { checkNumero } from './numeros.js';
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] , disableEveryone: false });
 
 const pattern = /^cum */;
@@ -21,6 +21,11 @@ const pattern_2 = /cum/;
 
 
 const drogas_message = ["si" , "dame" , "quiero" , "venga la droga" , "DRAGS"];
+
+
+
+
+
 client.on('message' , async message => {
     message.content = message.content.toLowerCase();
     if(pattern_a.test(message.content) && message.author.id !== '885480631470010390'){
@@ -58,13 +63,22 @@ client.on('message' , async message => {
         message.reply(drogas_message[randomInt(0 , drogas_message.length -1 )]);
     }
     let tokens = message.content.split(" ")
+    let hit = false;
+    let ans;
     for ( let i = 0 ; i < tokens.length ; i++ ){
         if(metaphone(tokens[i]) === metaphone('cum') && message.author.id !== '885480631470010390' ){            
             message.react("💦");
             break;
         }
+        ans = checkNumero(tokens[i]);
+        if (ans.hit){
+            message.reply(ans.joke);
+        }
+        hit = hit | ans.hit;
     }
-    
+    if ( hit ){
+        message.reply('te falta calle');
+    }
     if ( message.guildId === '427157513234808842'){
         let num =randomInt(1 , 100 );
         console.log(num + ' shiny');
@@ -86,6 +100,12 @@ client.once('ready' , () => {
     }, leftToHour(9));
     //mandar_cumpleaños(client);
 });
+
+
+
+
+
+
 
 
 async function handle_cum_a( message){

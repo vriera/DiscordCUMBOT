@@ -18,7 +18,7 @@
   "homepage": "https://github.com/vriera/Co-o-Bot#readme",
   "dependencies": {
     "discord.js": "^13.1.0",
-    "dotenv": "^14.2.0",
+    "dotenv": "^14.3.0",
     "metaphone": "^2.0.0"
   },
   "type": "module"
